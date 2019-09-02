@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.vtstar.graphql.demo.mapper.AuthorMapper">
+
+    <!-- result map -->
+    <resultMap type="net.vtstar.graphql.demo.domain.Author" id="authorMap">
+        <id property="id" column="id"/>
+        <result property="firstName" column="first_name"/>
+        <result property="lastName" column="last_name"/>
+        <result property="createTime" column="create_time" javaType="java.util.Date"/>
+        <result property="updateTime" column="update_time" javaType="java.util.Date"/>
+        <collection property="books" column="id"
+                    select="net.vtstar.graphql.demo.mapper.BookMapper.findByAuthorId"
+                    ofType="net.vtstar.graphql.demo.domain.Book" />
+    </resultMap>
+
+    <!-- sqlColumn-->
+    <sql id="SQL_AUTHOR_COLUMN">
+            id,
+            first_name,
+            last_name,
+            create_time,
+            update_time
+    </sql>
+
+
+    <!-- Query All  -->
+    <select id="findList" resultMap="authorMap">
+        select
+            <include refid="SQL_AUTHOR_COLUMN"/>
+        from
+            AUTHOR
+    </select>
+
+
+
+
+</mapper>

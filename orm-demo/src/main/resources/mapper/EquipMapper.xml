@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.vtstar.orm.demo.orm.mapper.EquipMapper">
+
+    <!-- result map -->
+    <resultMap type="net.vtstar.orm.demo.domain.Equipment" id="equipmentMap">
+        <id property="id" column="id" javaType="Long"/>
+        <result property="name" column="equipment_name" javaType="String"/>
+        <result property="code" column="code" javaType="String"/>
+    </resultMap>
+
+    <!-- sqlColumn-->
+    <sql id="SQL_EQUIPMENT_COLUMN">
+            e_.id,
+            e_.name,
+            e_.code
+    </sql>
+
+
+    <!-- Query All  -->
+    <select id="findAll" parameterType="net.vtstar.orm.demo.domain.Equipment"
+            resultMap="equipmentMap">
+        select
+            <include refid="SQL_EQUIPMENT_COLUMN"/>
+        from
+            EQUIPMENT e_
+    </select>
+
+    <select id="findById" parameterType="long"
+            resultMap="equipmentMap">
+        select
+            <include refid="SQL_EQUIPMENT_COLUMN"/>
+        from
+            EQUIPMENT e_
+        where e_.id = #{id
+    </select>
+
+
+
+
+
+
+
+</mapper>

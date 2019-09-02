@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.vtstar.graphql.demo.mapper.BookMapper">
+
+    <!-- result map -->
+    <resultMap type="net.vtstar.graphql.demo.domain.Book" id="bookMap">
+        <id property="id" column="id"/>
+        <result property="name" column="name" javaType="String"/>
+        <result property="pageCount" column="page_count"/>
+        <result property="authorId" column="author_id" />
+        <result property="createTime" column="create_time" javaType="java.util.Date"/>
+        <result property="updateTime" column="update_time" javaType="java.util.Date"/>
+    </resultMap>
+
+    <!-- sqlColumn-->
+    <sql id="SQL_BOOK_COLUMN">
+            id,
+            name,
+            page_count,
+            author_id,
+            create_time,
+            update_time
+    </sql>
+
+
+    <!-- Query All  -->
+    <select id="findList" resultMap="bookMap">
+        select
+            <include refid="SQL_BOOK_COLUMN"/>
+        from
+            BOOK
+    </select>
+
+    <select id="findByAuthorId" parameterType="integer"
+            resultMap="bookMap">
+        select
+            <include refid="SQL_BOOK_COLUMN"/>
+        from
+            BOOK
+        where
+        author_id = #{authorId}
+    </select>
+
+    <select id="getById" parameterType="integer"
+            resultMap="bookMap">
+        select
+            <include refid="SQL_BOOK_COLUMN"/>
+        from
+            BOOK
+        where
+        id = #{id}
+    </select>
+
+
+    <insert id="create" parameterType="net.vtstar.graphql.demo.domain.Book">
+        insert into BOOK
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != id">
+                id,
+            </if>
+            <if test="null != name">
+                name,
+            </if>
+            <if test="null != pageCount">
+                page_count,
+            </if>
+            <if test="null != authorId">
+                author_id
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="null != id">
+                #{id},
+            </if>
+            <if test="null != name">
+                #{name},
+            </if>
+            <if test="null != pageCount">
+                #{pageCount},
+            </if>
+            <if test="null != authorId">
+                #{authorId}
+            </if>
+        </trim>
+        <selectKey resultType="integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS id
+        </selectKey>
+    </insert>
+
+    <update id="update" parameterType="net.vtstar.graphql.demo.domain.Book">
+        update BOOK
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="pageCount != null">
+                page_count = #{pageCount},
+            </if>
+            <if test="authorId != null">
+                author_id = #{authorId},
+            </if>
+        </set>
+        WHERE
+        id = #{id};
+    </update>
+
+    <delete id="deleteById" parameterType="integer">
+        delete
+        from
+            BOOK
+        where id = #{id};
+    </delete>
+
+
+
+</mapper>
